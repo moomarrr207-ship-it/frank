@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم المحيط الأزرق | أشهى المأكولات البحرية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ألوان مطعم بحري متناسقة */
+            --bg-light: #f4f9f9;
+            --bg-card: #ffffff;
+            --bg-card-hover: #eef8fc;
+            --blue-dark: #003b5c;
+            --blue-ocean: #00b4d8;
+            --coral-red: #f07167;
+            --coral-hover: #e05d53;
+            --text-main: #1d3557;
+            --text-muted: #457b9d;
+            --border: rgba(0, 180, 216, 0.2);
+            --gradient-ocean: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+            --font-body: 'Cairo', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><path d="M0 50 Q 25 30 50 50 T 100 50" fill="none" stroke="%2300b4d815" stroke-width="2"/></svg>');
+        }
+
+        /* Header & Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--border);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--blue-dark);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--coral-red);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: var(--blue-dark);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: var(--blue-ocean);
+            box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3);
+        }
+
+        .cart-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--coral-red);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .cart-trigger:hover {
+            background: var(--coral-hover);
+            box-shadow: 0 5px 15px rgba(240, 113, 103, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .cart-badge {
+            background: #fff;
+            color: var(--coral-red);
+            padding: 2px 8px;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        /* Container & Page Views */
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-grow: 1;
+            padding: 40px 0 60px;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .view-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= PAGE 1: HOME ================= */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--gradient-ocean);
+            border-radius: 20px;
+            color: #fff;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0, 119, 182, 0.2);
+        }
+
+        .hero h1 { font-size: 48px; font-weight: 900; margin-bottom: 15px; }
+        .hero h1 span { color: #ffd166; }
+        .hero p { font-size: 20px; max-width: 700px; margin: 0 auto 30px; opacity: 0.9; }
+
+        .btn-main {
+            background: var(--coral-red);
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(240, 113, 103, 0.4);
+        }
+
+        .btn-main:hover { transform: scale(1.05); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        
+        .feature-card:hover { transform: translateY(-10px); border-color: var(--blue-ocean); }
+        .feature-icon { font-size: 45px; margin-bottom: 15px; }
+        .feature-title { font-size: 22px; font-weight: 700; color: var(--blue-dark); margin-bottom: 10px; }
+        .feature-desc { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+
+        /* ================= PAGE 2 & 3: MENU & OFFERS ================= */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 { font-size: 36px; color: var(--blue-dark); font-weight: 900; }
+        .section-header p { color: var(--text-muted); font-size: 18px; margin-top: 5px; }
+
+        .filter-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background: #fff;
+            border: 2px solid var(--blue-ocean);
+            color: var(--blue-dark);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--blue-ocean);
+            color: #fff;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: 0.3s;
+            border: 1px solid transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--blue-ocean);
+            box-shadow: 0 12px 25px rgba(0, 180, 216, 0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--coral-red);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+
+        .product-img { width: 100%; height: 220px; object-fit: cover; }
+        .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-name { font-size: 20px; font-weight: 800; color: var(--blue-dark); margin-bottom: 5px; }
+        .product-specs { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; flex-grow: 1; }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .product-price { font-size: 22px; font-weight: 900; color: var(--coral-red); }
+        .btn-add-cart {
+            background: var(--blue-ocean);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-add-cart:hover { background: var(--blue-dark); }
+
+        /* ================= PAGE 4: ABOUT ================= */
+        .about-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .about-box h3 { color: var(--blue-dark); font-size: 28px; margin-bottom: 20px; }
+        .about-box p { color: var(--text-muted); font-size: 18px; line-height: 1.8; margin-bottom: 20px; }
+
+        /* ================= PAGE 5: CHECKOUT ================= */
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 900px) { .checkout-container { grid-template-columns: 1fr; } }
+
+        .glass-panel {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .glass-panel h3 { color: var(--blue-dark); font-size: 22px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between;}
+        
+        .cart-list-items { max-height: 350px; overflow-y: auto; padding-left: 10px; margin-bottom: 20px; }
+        .cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .cart-item-title { font-weight: 700; color: var(--blue-dark); font-size: 15px; }
+        .cart-item-price { color: var(--coral-red); font-weight: 800; }
+        .btn-remove { background: none; border: none; color: #ff3333; cursor: pointer; font-size: 18px; }
+        
+        .checkout-total-row {
+            display: flex; justify-content: space-between; font-size: 24px; font-weight: 900;
+            color: var(--blue-dark); margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ddd;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+        .form-input, .form-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--blue-ocean); }
+        
+        .btn-submit {
+            width: 100%; background: var(--gradient-ocean); color: #fff; border: none;
+            padding: 15px; border-radius: 8px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 10px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 20px; left: 20px; background: var(--blue-dark); color: #fff;
+            padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(100px); opacity: 0; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-weight: 700; z-index: 9999;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        footer { text-align: center; padding: 25px; background: var(--blue-dark); color: #fff; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="switchTab('home')">
+            🐟 Blue<span>Ocean</span>
+        </div>
+        <ul class="nav-links">
+            <li><a class="nav-link active" id="nav-home" onclick="switchTab('home')">الرئيسية</a></li>
+            <li><a class="nav-link" id="nav-menu" onclick="switchTab('menu')">المنيو</a></li>
+            <li><a class="nav-link" id="nav-offers" onclick="switchTab('offers')">العروض 🔥</a></li>
+            <li><a class="nav-link" id="nav-about" onclick="switchTab('about')">عن المطعم</a></li>
+        </ul>
+        <button class="cart-trigger" onclick="switchTab('checkout')">
+            🛒 السلة <span class="cart-badge" id="cart-count">0</span>
+        </button>
+    </header>
+
+    <div class="container">
+
+        <!-- ================= SECTION 1: HOME ================= -->
+        <section id="view-home" class="view-section active">
+            <div class="hero">
+                <h1>أشهى المأكولات البحرية <span>طازجة يومياً</span></h1>
+                <p>من البحر إلى طاولتك مباشرة! استمتع بألذ أسماك البحر الأحمر والمتوسط المحضرة بأيدي أمهر الطهاة لضمان تجربة لا تُنسى.</p>
+                <button class="btn-main" onclick="switchTab('menu')">اطلب الآن 🍽️</button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎣</div>
+                    <div class="feature-title">صيد اليوم</div>
+                    <div class="feature-desc">أسماكنا طازجة 100%، تصلنا يومياً فجراً من أفضل مراكب الصيد لضمان الجودة والطعم الأصلي.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🍳</div>
+                    <div class="feature-title">خلطات سرية</div>
+                    <div class="feature-desc">تتبيلات بهاراتنا الخاصة والمميزة تعطي للأسماك والطواجن طعماً ساحراً لن تجده في أي مكان آخر.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛵</div>
+                    <div class="feature-title">توصيل ساخن</div>
+                    <div class="feature-desc">نستخدم حافظات حرارية متطورة لضمان وصول وجبتك ساخنة وطازجة في أسرع وقت لباب البيت.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: MENU ================= -->
+        <section id="view-menu" class="view-section">
+            <div class="section-header">
+                <h2>قائمة الطعام 📜</h2>
+                <p>اختر ما تشتهيه من أسماك، قشريات، وطواجن</p>
+            </div>
+            
+            <div class="filter-tags">
+                <button class="filter-btn active" onclick="filterMenu('all', this)">الكل</button>
+                <button class="filter-btn" onclick="filterMenu('fish', this)">أسماك</button>
+                <button class="filter-btn" onclick="filterMenu('shrimp', this)">جمبري وقشريات</button>
+                <button class="filter-btn" onclick="filterMenu('tajin', this)">طواجن وشوربة</button>
+            </div>
+
+            <div class="products-grid" id="menu-container"></div>
+        </section>
+
+        <!-- ================= SECTION 3: OFFERS ================= -->
+        <section id="view-offers" class="view-section">
+            <div class="section-header">
+                <h2>عروض التوفير والوجبات العائلية 🔥</h2>
+                <p>عروض مذهلة لفترة محدودة، طعم رائع وتوفير أكيد</p>
+            </div>
+            <div class="products-grid" id="offers-container"></div>
+        </section>
+
+        <!-- ================= SECTION 4: ABOUT ================= -->
+        <section id="view-about" class="view-section">
+            <div class="about-box">
+                <h3>عن مطعم بلو أوشن 🌊</h3>
+                <p>بدأت رحلتنا من حبنا للبحر وعشقنا لتقديم أطباق بحرية استثنائية. في مطعم "بلو أوشن"، لا نساوم على الجودة أبداً، فكل سمكة وقطعة جمبري يتم اختيارها بعناية فائقة.</p>
+                <p>نحن نؤمن بأن الأكل البحري ليس مجرد وجبة، بل هو مزاج وتجربة متكاملة، لذلك نحرص على النظافة التامة، والخدمة السريعة، والطعم الذي يسعد الحواس.</p>
+                <div style="margin-top: 30px; font-weight: bold; color: var(--coral-red);">
+                    📍 فروعنا: الإسكندرية - القاهرة (التجمع الخامس) - الساحل الشمالي <br>
+                    📞 الخط الساخن: 19XXX
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: CHECKOUT ================= -->
+        <section id="view-checkout" class="view-section">
+            <div class="section-header">
+                <h2>إتمام الطلب والدفع 🧾</h2>
+                <p>راجع سلة طعامك وأدخل بيانات الاستلام ليصلك المندوب</p>
+            </div>
+
+            <div class="checkout-container">
+                <!-- Cart Data -->
+                <div class="glass-panel">
+                    <h3><span>أطباقك المختارة 🍽️</span> <button onclick="clearCart()" style="font-size:14px; background:none; border:none; color:red; cursor:pointer;">مسح الكل</button></h3>
+                    <div class="cart-list-items" id="cart-items-display"></div>
+                    
+                    <div style="display:flex; justify-content:space-between; color:#666; margin-top: 15px;">
+                        <span>خدمة التوصيل:</span> <span style="color:green; font-weight:bold;">مجاناً</span>
+                    </div>
+                    <div class="checkout-total-row">
+                        <span>الإجمالي:</span> <span id="total-val">0 ج.م</span>
+                    </div>
+                </div>
+
+                <!-- Checkout Form -->
+                <div class="glass-panel">
+                    <h3>بيانات التوصيل 🛵</h3>
+                    <form id="checkout-form" action="https://formsubmit.co/moomarrr207@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="🍽️ أوردر طعام جديد من Blue Ocean!">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="الأصناف_المطلوبة" id="form-items-input">
+                        <input type="hidden" name="الإجمالي" id="form-total-input">
+
+                        <div class="form-group">
+                            <label>الاسم:</label>
+                            <input type="text" name="الاسم" class="form-input" required placeholder="اسم المستلم">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف:</label>
+                            <input type="tel" name="الموبايل" class="form-input" required placeholder="01xxxxxxxxx">
+                        </div>
+                        <div class="form-group">
+                            <label>العنوان بالتفصيل:</label>
+                            <textarea name="العنوان" class="form-textarea" required placeholder="المنطقة، الشارع، العمارة، رقم الشقة"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>ملاحظات للطاهي (اختياري):</label>
+                            <input type="text" name="ملاحظات" class="form-input" placeholder="مثال: زيادة طحينة، السمك مشوي زيت وليمون...">
+                        </div>
+
+                        <button type="submit" class="btn-submit">تأكيد الطلب الآن ✔️</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <span>✅</span> <span id="toast-text">تمت الإضافة بنجاح</span>
+    </div>
+
+    <footer>
+        <p>© 2026 مطعم بلو أوشن للمأكولات البحرية. الطعم الأصلي للبحر.</p>
+    </footer>
+
+    <script>
+        // قواعد البيانات (المنيو والعروض)
+        const allProducts = [
+            // أسماك
+            { id: 1, type: 'menu', category: 'fish', title: 'كيلو سمك بلطي مقلي', specs: 'متبل بخلطة الثوم والليمون يقدم مع جرجير', price: 120, badge: 'شعبي', img: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?auto=format&fit=crop&w=600&q=80' },
+            { id: 2, type: 'menu', category: 'fish', title: 'كيلو بوري مشوي رَدّة', specs: 'بوري طازج مشوي بالرَدّة الفلاحي على الفحم', price: 210, badge: 'طازج', img: 'https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&w=600&q=80' },
+            { id: 3, type: 'menu', category: 'fish', title: 'سمك دنيس زيت وليمون', specs: 'الحبة (500 جم) مشوية بالفرن مع صوص الزبدة', price: 250, badge: 'فاخر', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80' },
+            { id: 4, type: 'menu', category: 'fish', title: 'سمك قاروص سنجاري', specs: 'مفتوح ومحشي بخلطة الخضار والتوابل', price: 280, badge: 'طلب الأكيلة', img: 'https://images.unsplash.com/photo-1511693892305-b040e32f05a0?auto=format&fit=crop&w=600&q=80' },
+            
+            // قشريات
+            { id: 5, type: 'menu', category: 'shrimp', title: 'نصف كيلو جمبري جامبو مقلي', specs: 'جمبري كرسبي يقدم مع صوص تارتار ومستردا', price: 350, badge: 'كرسبي', img: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=600&q=80' },
+            { id: 6, type: 'menu', category: 'shrimp', title: 'طاجن كاليماري إسكندراني', specs: 'حلقات كاليماري بصوص الطماطم الحار والخضروات', price: 180, badge: 'حار 🌶️', img: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80' },
+            { id: 7, type: 'menu', category: 'shrimp', title: 'كيلو كابوريا مشوية', specs: 'كابوريا إناث مليئة بالبطارخ مشوية على الجريل', price: 240, badge: 'بطارخ', img: 'https://images.unsplash.com/photo-1569260195045-814981882650?auto=format&fit=crop&w=600&q=80' },
+
+            // طواجن وشوربة
+            { id: 8, type: 'menu', category: 'tajin', title: 'شوربة سي فود مخلية', specs: 'جمبري، كاليماري، بلح البحر بالكريمة اللذيذة', price: 130, badge: 'كريمة', img: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4850?auto=format&fit=crop&w=600&q=80' },
+            { id: 9, type: 'menu', category: 'tajin', title: 'طاجن جمبري بالموتزاريلا', specs: 'جمبري طازج في الفرن مغطى بطبقة جبن ذائبة', price: 220, badge: 'لذيذ', img: 'https://images.unsplash.com/photo-1626200927891-b669f6ba8934?auto=format&fit=crop&w=600&q=80' },
+
+            // العروض (تظهر في تاب العروض فقط)
+            { id: 10, type: 'offer', category: 'offer', title: 'وجبة التوفير لشخصين', specs: '2 سمك بلطي + ربع جمبري + 2 أرز صيدية + سلطات', price: 250, badge: 'توفير 20%', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80' },
+            { id: 11, type: 'offer', category: 'offer', title: 'صينية العائلة الملكية', specs: 'كيلو دنيس + كيلو قاروص + نص جمبري + طاجن كاليماري + شوربة', price: 1150, badge: 'يكفي 5 أفراد', img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        let cart = [];
+
+        // التنقل بين الصفحات (Tabs)
+        function switchTab(viewName) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+            document.getElementById(`view-${viewName}`).classList.add('active');
+            const link = document.getElementById(`nav-${viewName}`);
+            if(link) link.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewName === 'checkout') renderCart();
+        }
+
+        // رسم كروت المنتجات
+        function generateHTML(items) {
+            return items.map(p => `
+                <div class="product-card">
+                    <div class="product-badge">${p.badge}</div>
+                    <img src="${p.img}" class="product-img" alt="${p.title}" loading="lazy">
+                    <div class="product-info">
+                        <div class="product-name">${p.title}</div>
+                        <div class="product-specs">${p.specs}</div>
+                        <div class="product-footer">
+                            <div class="product-price">${p.price} ج.م</div>
+                            <button class="btn-add-cart" onclick="addToCart(${p.id})">+ للسلة</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // فلترة المنيو
+        function filterMenu(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            let menuItems = allProducts.filter(p => p.type === 'menu');
+            if (cat !== 'all') menuItems = menuItems.filter(p => p.category === cat);
+            
+            document.getElementById('menu-container').innerHTML = generateHTML(menuItems);
+        }
+
+        // السلة
+        function addToCart(id) {
+            const item = allProducts.find(p => p.id === id);
+            cart.push(item);
+            document.getElementById('cart-count').innerText = cart.length;
+            
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = `تمت إضافة "${item.title}"`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function removeCartItem(idx) {
+            cart.splice(idx, 1);
+            document.getElementById('cart-count').innerText = cart.length;
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            document.getElementById('cart-count').innerText = 0;
+            renderCart();
+        }
+
+        function renderCart() {
+            const display = document.getElementById('cart-items-display');
+            if(cart.length === 0) {
+                display.innerHTML = '<p style="text-align:center; color:#777; padding:20px;">السلة فارغة، قم باختيار أطباقك اللذيذة أولاً!</p>';
+                document.getElementById('total-val').innerText = '0 ج.م';
+                return;
+            }
+
+            let total = 0;
+            let formItems = [];
+
+            display.innerHTML = cart.map((item, i) => {
+                total += item.price;
+                formItems.push(`${item.title}`);
+                return `
+                    <div class="cart-item-row">
+                        <span class="cart-item-title">${item.title}</span>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span class="cart-item-price">${item.price} ج.م</span>
+                            <button class="btn-remove" onclick="removeCartItem(${i})">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('total-val').innerText = `${total} ج.م`;
+            document.getElementById('form-items-input').value = formItems.join(' ، ');
+            document.getElementById('form-total-input').value = `${total} ج.م`;
+        }
+
+        // منع إرسال الفورم إذا كانت السلة فارغة
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            if(cart.length === 0) {
+                e.preventDefault();
+                alert('السلة فارغة! برجاء اختيار الطعام أولاً.');
+                switchTab('menu');
+            }
+        });
+
+        // تهيئة الصفحة لأول مرة
+        filterMenu('all'); // رسم المنيو
+        document.getElementById('offers-container').innerHTML = generateHTML(allProducts.filter(p => p.type === 'offer')); // رسم العروض
+    </script>
+</body>
+</html>
